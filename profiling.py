@@ -18,8 +18,7 @@ port = 27017
 # find all operation info from this collection
 db_name 	= 'testing'
 coll_name 	= 'intense_testing'
-username = ''
-password = ''
+MongoDB_URL = 'mongodb://localhost'
 
 # the field that you are interested in. add if you want more
 # it's also the header in csv file.
@@ -59,11 +58,10 @@ def is_display_op(query_dict):
 def connectDB():
 	print 'connect to database'
 	try:
-		client = MongoClient(host, port)
+		client = MongoClient(MongoDB_URL)
 	except Exception, e:
-		raise e
-	if username != '':
-		client.the_database.authenticate(username, password)
+		print 'failed to connect to database: %s' % str(e)
+		exit()
 	return client
 
 # search index information in a dict
