@@ -34,26 +34,13 @@ profile_limit = 0
 connect_to_db = False
 
 bins = 50
-
-# operation type that is going to display
-display_op = [
-	'find',
-	'insert',
-	'update',
-]
-
-
+histtype = 'step'
 
 
 # --------------------------------------------------
 # # # # # # # # # # Methods # # # # # # # # # # #
 # --------------------------------------------------
 
-def is_display_op(query_dict):
-	for op in display_op:
-		if op in query_dict:
-			return True
-	return False
 
 def connectDB():
 	print 'connect to database'
@@ -129,11 +116,13 @@ if __name__ == '__main__':
 	else:
 		with open(json_outfile, 'r') as f:
 			filter_data = json.load(f)
-	time_stamps = []
+	time_stamps = {}
 	for elem in filter_data:
-		if is_display_op(elem['query']):
-			time_stamps.append(elem['delta_sec'])
-	plt.hist(time_stamps, bins, histtype = 'step')
+		op_tpye = elem['op']
+		if not op_tpye in time_stamps:
+			time_stamps[op_tpye] = []
+		time_stamps[op_tpye].append(elem['delta_sec'])
+	plt.hist(time_stamps.values(), bins*len(time_stamps), label=time_stamps.keys(), histtype=histtype)
 	plt.xlabel('time (sec)')
 	plt.ylabel('number of query')
 	# plt.title(title)
