@@ -31,7 +31,8 @@ json_outfile = 'profile_info.json'
 # the maximum number of results to return. 0 = all results
 profile_limit = 0
 
-connect_to_db = False
+# If true: connect to database and extract new profile data
+update_profile_data = False
 
 bins = 50
 histtype = 'step'
@@ -89,7 +90,7 @@ def field_filter(data):
 # --------------------------------------------------
 
 if __name__ == '__main__':
-	if connect_to_db:
+	if update_profile_data:
 		client = connectDB()
 		db = client[db_name]
 		print 'reading system.profile'
@@ -103,7 +104,7 @@ if __name__ == '__main__':
 			[elem['stage'], elem['keyPattern']] = findIXSCAN(elem['execStats'])
 			elem['ts_str'] = str(elem['ts'])
 			elem['delta_sec'] = (elem['ts'] - start_dtime).total_seconds()
-			del elem['ts']
+			del elem['ts'] # Can not be serialized by json
 
 		print 'saving CSV files'
 		with open(csv_outfile, 'w') as f:
@@ -125,7 +126,7 @@ if __name__ == '__main__':
 	plt.hist(time_stamps.values(), bins*len(time_stamps), label=time_stamps.keys(), histtype=histtype)
 	plt.xlabel('time (sec)')
 	plt.ylabel('number of query')
-	# plt.title(title)
+	plt.title('Workloads in collection [%s.%s]' % (db_name, coll_name))
 	plt.legend()
 	plt.show()
 
