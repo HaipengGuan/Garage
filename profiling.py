@@ -46,7 +46,8 @@ histtype = 'step'
 def connectDB():
 	print 'connect to database'
 	try:
-		client = MongoClient(MongoDB_URL)
+		client = MongoClient(MongoDB_URL, serverSelectionTimeoutMS=1)
+		client.server_info()
 	except Exception, e:
 		print 'failed to connect to database: %s' % str(e)
 		exit()
