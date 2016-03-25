@@ -164,3 +164,81 @@ class ArrayAlgo(object):
                 hi = index-1
             index = self.partition(nums, lo, hi)
         return nums[index]
+
+    def search_rotated_sorted(self, nums, target):
+        """https://leetcode.com/problems/search-in-rotated-sorted-array/
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        lo, hi = 0, len(nums)-1
+        while lo <= hi:
+            mid = (lo+hi)/2
+            if nums[mid] == target: return mid
+            elif nums[lo] <= nums[mid]: # nums[lo: mid+1] is sorted
+                if nums[lo] <= target < nums[mid]: # target in nums[lo: mid+1]
+                    hi = mid-1
+                else:
+                    lo = mid+1
+            else: # nums[mid: hi+1] is sorted
+                if nums[mid] < target <= nums[hi]:  # target in nums[mid: hi+1]
+                    lo = mid+1
+                else:
+                    hi = mid-1
+        return -1
+
+
+    def findMin_rotated_sorted(self, nums):
+        """https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
+        :type nums: List[int]
+        :rtype: int
+        """
+        lo, hi = 0, len(nums)-1
+        while lo < hi:
+            mid = (lo+hi)/2
+            # print nums[lo:hi+1]
+            print nums[lo], nums[mid], nums[hi]
+            if nums[hi] < nums[mid]: # nums[lo: mid+1] is sorted, min in [mid:hi+1]
+                lo = mid+1
+            elif nums[mid] < nums[hi]: # nums[mid: hi+1] is sorted, min in [lo:mid+1]
+                hi = mid
+            else: hi-=1
+        return nums[lo]
+
+    class MaxProfit(object):
+        """https://leetcode.com/problems/best-time-to-buy-and-sell-stock/"""
+        def maxProfit_I(self, prices):
+            """https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+            :type prices: List[int]
+            :rtype: int
+            """
+            # ---------- more consist solution: -----------
+            # if len(prices) <= 1: return 0
+            # min_price = prices[0]
+            # max_profit = 0
+            # for i in xrange(1, len(nums)):
+            #     min_price = min(min_price, prices[i])
+            #     max_profit = max(max_profit, prices[i]-min_price)
+            # return max_profit
+            # ---------- my initial solution: -------------
+            if len(prices) <= 1: return 0
+            buy = 0
+            while buy+1 < len(prices) and prices[buy+1] <= prices[buy]:
+                buy += 1
+            hold = buy
+            max_profit = 0
+            while hold+1 < len(prices) and prices[hold+1] > prices[buy]:
+                hold += 1
+                max_profit = max(max_profit, prices[hold] - prices[buy])
+            return max(max_profit, self.maxProfit(prices[hold+1:]))
+        def maxProfit_II(self, prices):
+            """https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/
+            :type prices: List[int]
+            :rtype: int
+            """
+            profit = 0
+            for i in range(1, len(prices)):
+                if prices[i] > prices[i-1]:
+                    profit += prices[i] - prices[i-1]
+            return profit
+
