@@ -76,7 +76,7 @@ class ArrayAlgo(object):
         return False
 
 
-    def binary_search(self, nums, k, lo, hi):
+    def binary_search(self, nums, k, lo, hi): # hi is inclusive
         while lo <= hi:
             mid = (lo+hi)/2
             if k == nums[mid]:
@@ -212,7 +212,7 @@ class ArrayAlgo(object):
             :type prices: List[int]
             :rtype: int
             """
-            # ---------- more consist solution: -----------
+            # ---------- more concise solution: -----------
             # if len(prices) <= 1: return 0
             # min_price = prices[0]
             # max_profit = 0
