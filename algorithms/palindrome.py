@@ -7,7 +7,52 @@ class Palindrome(object):
         :type s: str
         :rtype: str
         """
-        pass
+        j = 0
+        for i in reversed(xrange(len(s))):
+            if s[i] == s[j]: j += 1
+        if j == len(s): return s
+        return ''.join(s[:j-1:-1]) + self.shortestPalindrome(s[:j]) + s[j:]
+
+
+    # def shortestPalindrome(self, s):
+    #     """https://leetcode.com/problems/shortest-palindrome/
+    #     - Given a string S, you are allowed to convert it to a palindrome by adding characters in front of it.
+    #     - Find and return the shortest palindrome you can find by performing this transformation.
+    #     - Given "aacecaaa", return "aaacecaaa". Given "abcd", return "dcbabcd".
+    #     :type s: str
+    #     :rtype: str
+    #     """
+    #     current_center = end = begin = 0
+    #     s_1 = '#' + '#'.join(list(s)) + '#'
+    #     dp = [0] * len(s_1)
+    #     while current_center < len(s_1):
+    #         while begin > 0 and end < len(s_1)-1 and s_1[begin-1] == s_1[end+1]:
+    #             begin -= 1
+    #             end += 1
+    #         dp[current_center] = (end - begin + 1)/2
+    #         if end == len(s_1)-1: break
+    #         new_center = current_center+1
+    #         while new_center <= end:
+    #             sym_index = 2 * current_center - new_center
+    #             if new_center + dp[sym_index] < end:
+    #                 dp[new_center] = dp[sym_index]
+    #                 new_center += 1
+    #             elif new_center + dp[sym_index] == end:
+    #                 dp[new_center] = dp[sym_index]
+    #                 break
+    #             else:
+    #                 dp[new_center] = end - new_center
+    #                 new_center += 1
+    #         current_center = new_center
+    #         begin = new_center - dp[new_center]
+    #         end   = new_center + dp[new_center]
+    #     max_index = 0
+    #     max_length = 1
+    #     for i in range(len(dp)):
+    #         if i/2 - dp[i]/2 <= 0 and dp[i] > max_length:
+    #             max_length = dp[i]
+    #     return ''.join(s[:max_length-1:-1]) + s
+
 
     def longestPalindrome(self, s):
         """https://leetcode.com/problems/longest-palindromic-substring/
